@@ -26,28 +26,20 @@ namespace Thunder {
 
         // This is an example to show the workings and how to develope a COMRPC/JSONRPC method/interface
         /* @json 1.0.0 */
-        struct EXTERNAL IMaths : virtual public Core::IUnknown {
+        struct EXTERNAL IMath : virtual public Core::IUnknown {
 
-            enum { ID = ID_MATHS };
+            enum { ID = ID_MATH };
 
-            ~IMaths() override = default;
+            ~IMath() override = default;
 
-            // @brief Perform Multiplication on given inputs
-            // @param A: First input
-            // @param B: Second input
-            virtual uint32_t Mul(const uint16_t A,const uint16_t B, uint32_t& result /* @out */) const = 0;
-            // @brief Perform Division on given inputs
-            // @param A: First input
-            // @param B: Second input
-            virtual uint32_t Div(const uint16_t A,const uint16_t B, uint16_t& result /* @out */) const = 0;
             // @brief Perform addition on given inputs
             // @param A: First input
             // @param B: Second input
-            virtual uint32_t Add(const uint16_t A, const uint16_t B, uint32_t& result /* @out */)  const = 0;
+            virtual uint32_t Add(const uint16_t A, const uint16_t B, uint16_t& sum /* @out */)  const = 0;
             // @brief Perform subtraction on given inputs
             // @param A: First input
             // @param B: Second input
-            virtual uint32_t Sub(const uint16_t A, const uint16_t B, uint16_t& result /* @out */)  const = 0;
+            virtual uint32_t Sub(const uint16_t A, const uint16_t B, uint16_t& sum /* @out */)  const = 0;
         };
     }
 }
