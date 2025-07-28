@@ -19,7 +19,7 @@
 
 #include "Module.h"
 
-#include <interfaces/IMath.h>
+#include <sample_interfaces/IMath.h>
 
 
 namespace Thunder {

@@ -57,7 +57,7 @@ namespace Exchange {
     // This is an example to show the workings and how to develope a COMRPC/JSONRPC method/interface
     struct IMath : virtual public Core::IUnknown {
 
-        enum { ID = ID_MATH };
+        enum { ID = IUnknown::ID_OFFSET_CUSTOM + 0x0120 };
 
         ~IMath() override = default;
 

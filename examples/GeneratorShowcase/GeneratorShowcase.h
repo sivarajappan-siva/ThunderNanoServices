@@ -21,11 +21,11 @@
 
 #include "Module.h"
 
-#include <interfaces/ISimpleAsync.h>
-#include <interfaces/JSimpleAsync.h>
+#include <sample_interfaces/ISimpleAsync.h>
+#include <sample_interfaces/json/JSimpleAsync.h>
 
-#include <interfaces/ISimpleInstanceObjects.h>
-#include <interfaces/JSimpleInstanceObjects.h>
+#include <sample_interfaces/ISimpleInstanceObjects.h>
+#include <sample_interfaces/json/JSimpleInstanceObjects.h>
 
 namespace Thunder {
 

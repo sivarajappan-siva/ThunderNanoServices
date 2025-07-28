@@ -20,7 +20,7 @@
 #include "Module.h"
 
 #include "DynamicJSONRPCErrorMessage.h"
-#include <interfaces/json/JMath.h>
+#include <sample_interfaces/json/JMath.h>
 
 #include <sstream>
 

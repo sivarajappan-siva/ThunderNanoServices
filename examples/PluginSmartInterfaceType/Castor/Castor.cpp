@@ -20,7 +20,7 @@
 #include "Module.h"
 
 #include "Castor.h"
-#include <interfaces/json/JMath.h>
+#include <sample_interfaces/json/JMath.h>
 #include <interfaces/IConfiguration.h>
 
 namespace Thunder {

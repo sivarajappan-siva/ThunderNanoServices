@@ -26,7 +26,7 @@
  // generated and it is named as:
  // <interface name>::Register(PluginHost::JSONRPC& handler, <interface name>* implementation);
  // <interface name>::Unregister(PluginHost::JSONRPC& handler);
-#include <interfaces/json/JMath.h>
+#include <sample_interfaces/json/JMath.h>
 
 
 namespace Thunder {

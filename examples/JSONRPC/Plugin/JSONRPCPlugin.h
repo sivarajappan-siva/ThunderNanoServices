@@ -29,7 +29,7 @@
 // From this source file, the ProxyStub (Marshalling code for the COMRPC) s created.
 // This code is loaded and handled by the Thunder framework. No need to do anything
 // within the plugin to make it available. 
-#include <interfaces/IMath.h>
+#include <sample_interfaces/IMath.h>
 
 namespace Thunder {
 

@@ -28,9 +28,9 @@ namespace Thunder {
         /* @json 1.0.0 */
         struct EXTERNAL IMath : virtual public Core::IUnknown {
 
-            enum { ID = ID_MATH };
-
-            ~IMath() override = default;
+          enum { ID = IUnknown::ID_OFFSET_CUSTOM + 0x0120 };
+          
+	  ~IMath() override = default;
 
             // @brief Perform addition on given inputs
             // @param A: First input

@@ -23,8 +23,8 @@
 #include <securityagent/securityagent.h>
 #endif
 #include <interfaces/IPerformance.h>
-#include <interfaces/IMath.h>
-#include <interfaces/json/JsonData_Math.h>
+#include <sample_interfaces/IMath.h>
+#include <sample_interfaces/json/JsonData_Math.h>
 
 #include "../Plugin/Data.h"
 
