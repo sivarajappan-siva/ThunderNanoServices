@@ -51,7 +51,7 @@ namespace Plugin {
         _service->AddRef();
         _service->Register(&_notification);
 
-        _mathImplementation = _service->Root<Sample::IMath>(_connectionId, 2000, _T("PolluxImplementation"));
+        _mathImplementation = _service->Root<Exchange::IMath>(_connectionId, 2000, _T("PolluxImplementation"));
         ASSERT(_mathImplementation != nullptr);
 
         if (_mathImplementation == nullptr) {

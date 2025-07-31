@@ -92,14 +92,14 @@ namespace Plugin {
         BEGIN_INTERFACE_MAP(Castor)
             INTERFACE_ENTRY(PluginHost::IPlugin)
             INTERFACE_ENTRY(PluginHost::IDispatcher)
-            INTERFACE_AGGREGATE(Exchange::IMath, _mathImplementation)
+            INTERFACE_AGGREGATE(Sample::IMath, _mathImplementation)
         END_INTERFACE_MAP
 
     private:
         PluginHost::IShell *_service;
         Core::SinkType<Notification> _notification;
         uint32_t _connectionId;
-        Exchange::IMath *_mathImplementation;
+        Sample::IMath *_mathImplementation;
     }; // class Castor
 
 } // namespace Plugin

@@ -137,7 +137,7 @@ namespace Plugin {
         }; // class DecoupledJob
 
     private:
-        class ImaginaryServer : public Exchange::ISimpleAsync {
+        class ImaginaryServer : public Sample::ISimpleAsync {
         public:
             ImaginaryServer(GeneratorShowcase& parent)
                 : _parent(parent)
@@ -146,7 +146,7 @@ namespace Plugin {
                 , _timer()
                 , _callback(nullptr)
                 , _address()
-                , _state(Exchange::ISimpleAsync::DISCONNECTED)
+                , _state(Sample::ISimpleAsync::DISCONNECTED)
             {
             }
             ~ImaginaryServer() override
@@ -158,7 +158,7 @@ namespace Plugin {
 
                 if (_callback != nullptr) {
                     // Closing but still a callback is installed
-                    _callback->Complete(_address, Exchange::ISimpleAsync::CONNECTING_FAILED);
+                    _callback->Complete(_address, Sample::ISimpleAsync::CONNECTING_FAILED);
                     _callback->Release();
                 }
 
@@ -171,23 +171,23 @@ namespace Plugin {
             ImaginaryServer& operator=(ImaginaryServer&&) = delete;
 
         public:
-            Core::hresult Connect(const string& address, const Core::OptionalType<uint16_t>& timeout, Exchange::ISimpleAsync::ICallback* const cb) override
+            Core::hresult Connect(const string& address, const Core::OptionalType<uint16_t>& timeout, Sample::ISimpleAsync::ICallback* const cb) override
             {
                 Core::hresult result = Core::ERROR_NONE;
 
                 _lock.Lock();
 
-                if (_state == Exchange::ISimpleAsync::CONNECTED) {
+                if (_state == Sample::ISimpleAsync::CONNECTED) {
                     TRACE(Trace::Error, (_T("Already connected")));
                     result = Core::ERROR_ALREADY_CONNECTED;
                 }
-                else if (_state == Exchange::ISimpleAsync::CONNECTING) {
+                else if (_state == Sample::ISimpleAsync::CONNECTING) {
                     TRACE(Trace::Error, (_T("Connection in progress")));
                     result = Core::ERROR_INPROGRESS;
                 }
                 else {
                     TRACE(Trace::Information, (_T("Connecting to %s..."), address.c_str()));
-                    _state = Exchange::ISimpleAsync::CONNECTING;
+                    _state = Sample::ISimpleAsync::CONNECTING;
                     _address = address;
 
                     if (_callback != nullptr) {
@@ -207,13 +207,13 @@ namespace Plugin {
                         // Stop the connection job
                         _job.Revoke();
 
-                        if (_state == Exchange::ISimpleAsync::CONNECTING) {
+                        if (_state == Sample::ISimpleAsync::CONNECTING) {
 
-                            _state = Exchange::ISimpleAsync::DISCONNECTED;
+                            _state = Sample::ISimpleAsync::DISCONNECTED;
 
                             // Timer fired, report a TIMED_OUT state
                             if (_callback != nullptr) {
-                                _callback->Complete(_address, Exchange::ISimpleAsync::CONNECTING_TIMED_OUT);
+                                _callback->Complete(_address, Sample::ISimpleAsync::CONNECTING_TIMED_OUT);
                                 _callback->Release();
                                 _callback = nullptr;
                             }
@@ -230,13 +230,13 @@ namespace Plugin {
 
                         _lock.Lock();
 
-                        if (_state == Exchange::ISimpleAsync::CONNECTING) {
+                        if (_state == Sample::ISimpleAsync::CONNECTING) {
 
-                            _state = Exchange::ISimpleAsync::CONNECTED;
+                            _state = Sample::ISimpleAsync::CONNECTED;
 
                             // Report CONNECTED state
                             if (_callback != nullptr) {
-                                _callback->Complete(_address, Exchange::ISimpleAsync::CONNECTED);
+                                _callback->Complete(_address, Sample::ISimpleAsync::CONNECTED);
                                 _callback->Release();
                                 _callback = nullptr;
                             }
@@ -261,14 +261,14 @@ namespace Plugin {
 
                 _lock.Lock();
 
-                if (_state != Exchange::ISimpleAsync::CONNECTING) {
+                if (_state != Sample::ISimpleAsync::CONNECTING) {
                     result = Core::ERROR_ILLEGAL_STATE;
                 }
                 else {
-                    _state = Exchange::ISimpleAsync::DISCONNECTED;
+                    _state = Sample::ISimpleAsync::DISCONNECTED;
 
                     if (_callback != nullptr) {
-                        _callback->Complete(_address, Exchange::ISimpleAsync::CONNECTING_ABORTED);
+                        _callback->Complete(_address, Sample::ISimpleAsync::CONNECTING_ABORTED);
                         _callback->Release();
                         _callback = nullptr;
                     }
@@ -284,17 +284,17 @@ namespace Plugin {
 
                 _lock.Lock();
 
-                if (_state == Exchange::ISimpleAsync::CONNECTING) {
+                if (_state == Sample::ISimpleAsync::CONNECTING) {
                     TRACE(Trace::Error, (_T("Connecting in progress")));
                     result = Core::ERROR_INPROGRESS;
                 }
-                else if (_state == Exchange::ISimpleAsync::DISCONNECTED) {
+                else if (_state == Sample::ISimpleAsync::DISCONNECTED) {
                     TRACE(Trace::Error, (_T("Not connected")));
                     result = Core::ERROR_ALREADY_RELEASED;
                 }
                 else {
                     _address.clear();
-                    _state = Exchange::ISimpleAsync::DISCONNECTED;
+                    _state = Sample::ISimpleAsync::DISCONNECTED;
                     TRACE(Trace::Information, (_T("Disconnected")));
                 }
 
@@ -305,7 +305,7 @@ namespace Plugin {
 
         public:
             BEGIN_INTERFACE_MAP(ImaginaryServer)
-                INTERFACE_ENTRY(Exchange::ISimpleAsync)
+                INTERFACE_ENTRY(Sample::ISimpleAsync)
             END_INTERFACE_MAP
 
         private:
@@ -313,15 +313,15 @@ namespace Plugin {
             Core::CriticalSection _lock;
             DecoupledJob _job;
             DecoupledJob _timer;
-            Exchange::ISimpleAsync::ICallback* _callback;
+            Sample::ISimpleAsync::ICallback* _callback;
             string _address;
-            Exchange::ISimpleAsync::state _state;
+            Sample::ISimpleAsync::state _state;
         }; // class ImaginaryServer
 
     private:
-        class ImaginaryHost : public Exchange::ISimpleInstanceObjects {
+        class ImaginaryHost : public Sample::ISimpleInstanceObjects {
 
-            class Device : public Exchange::ISimpleInstanceObjects::IDevice {
+            class Device : public Sample::ISimpleInstanceObjects::IDevice {
             public:
                 Device(GeneratorShowcase& parent, const string& name)
                     : _parent(parent)
@@ -403,11 +403,11 @@ namespace Plugin {
                 {
                     _lock.Lock();
 
-                    if (_state != Exchange::ISimpleInstanceObjects::ENABLED) {
+                    if (_state != Sample::ISimpleInstanceObjects::ENABLED) {
 
                         // Mock enabling in 1 second :)
                         _job.Schedule([this](){
-                            StateChanged(Exchange::ISimpleInstanceObjects::ENABLED);
+                            StateChanged(Sample::ISimpleInstanceObjects::ENABLED);
                         }, 1000);
                     }
 
@@ -419,8 +419,8 @@ namespace Plugin {
                 {
                     _lock.Lock();
 
-                    if (_state != Exchange::ISimpleInstanceObjects::DISABLED) {
-                        StateChanged(Exchange::ISimpleInstanceObjects::DISABLED);
+                    if (_state != Sample::ISimpleInstanceObjects::DISABLED) {
+                        StateChanged(Sample::ISimpleInstanceObjects::DISABLED);
                     }
 
                     _lock.Unlock();
@@ -429,7 +429,7 @@ namespace Plugin {
                 }
 
             private:
-                void StateChanged(const Exchange::ISimpleInstanceObjects::state state)
+                void StateChanged(const Sample::ISimpleInstanceObjects::state state)
                 {
                     _lock.Lock();
 
@@ -444,7 +444,7 @@ namespace Plugin {
 
             public:
                 BEGIN_INTERFACE_MAP(Device)
-                    INTERFACE_ENTRY(Exchange::ISimpleInstanceObjects::IDevice)
+                    INTERFACE_ENTRY(Sample::ISimpleInstanceObjects::IDevice)
                 END_INTERFACE_MAP
 
             private:
@@ -452,8 +452,8 @@ namespace Plugin {
                 mutable Core::CriticalSection _lock;
                 DecoupledJob _job;
                 string _name;
-                Exchange::ISimpleInstanceObjects::state _state;
-                std::vector<Exchange::ISimpleInstanceObjects::IDevice::INotification*> _observers;
+                Sample::ISimpleInstanceObjects::state _state;
+                std::vector<Sample::ISimpleInstanceObjects::IDevice::INotification*> _observers;
 
             }; // class Device
 
@@ -473,7 +473,7 @@ namespace Plugin {
             ImaginaryHost& operator=(ImaginaryHost&&) = delete;
 
         public:
-            Core::hresult Acquire(const string& name, Exchange::ISimpleInstanceObjects::IDevice*& device) override
+            Core::hresult Acquire(const string& name, Sample::ISimpleInstanceObjects::IDevice*& device) override
             {
                 Core::hresult result = Core::ERROR_NONE;
 
@@ -484,13 +484,13 @@ namespace Plugin {
                     TRACE(Trace::Error, (_T("Device unavailable")));
                 }
                 else {
-                    device = Core::ServiceType<Device>::Create<Exchange::ISimpleInstanceObjects::IDevice>(_parent, name);
+                    device = Core::ServiceType<Device>::Create<Sample::ISimpleInstanceObjects::IDevice>(_parent, name);
                     _devices.emplace(name, device);
                 }
 
                 return (result);
             }
-            Core::hresult Relinquish(Exchange::ISimpleInstanceObjects::IDevice* const device) override
+            Core::hresult Relinquish(Sample::ISimpleInstanceObjects::IDevice* const device) override
             {
                 Core::hresult result = Core::ERROR_NONE;
 
@@ -518,13 +518,13 @@ namespace Plugin {
 
         public:
             BEGIN_INTERFACE_MAP(ImaginaryHost)
-                INTERFACE_ENTRY(Exchange::ISimpleInstanceObjects)
+                INTERFACE_ENTRY(Sample::ISimpleInstanceObjects)
             END_INTERFACE_MAP
 
         private:
             GeneratorShowcase& _parent;
             mutable Core::CriticalSection _lock;
-            std::map<string, Exchange::ISimpleInstanceObjects::IDevice*> _devices;
+            std::map<string, Sample::ISimpleInstanceObjects::IDevice*> _devices;
 
         }; // class ImaginaryHost
 
@@ -539,14 +539,14 @@ namespace Plugin {
             _service = service;
             _service->AddRef();
 
-            _imaginaryServer = Core::ServiceType<ImaginaryServer>::Create<Exchange::ISimpleAsync>(*this);
-            _imaginaryHost = Core::ServiceType<ImaginaryHost>::Create<Exchange::ISimpleInstanceObjects>(*this);
+            _imaginaryServer = Core::ServiceType<ImaginaryServer>::Create<Sample::ISimpleAsync>(*this);
+            _imaginaryHost = Core::ServiceType<ImaginaryHost>::Create<Sample::ISimpleInstanceObjects>(*this);
 
             ASSERT(_imaginaryServer != nullptr);
             ASSERT(_imaginaryHost != nullptr);
 
-            Exchange::JSimpleAsync::Register(*this, _imaginaryServer);
-            Exchange::JSimpleInstanceObjects::Register(*this, _imaginaryHost, _storage);
+            Sample::JSimpleAsync::Register(*this, _imaginaryServer);
+            Sample::JSimpleInstanceObjects::Register(*this, _imaginaryHost, _storage);
 
             // Register for channel closures
             service->Register(&_notification);
@@ -554,7 +554,7 @@ namespace Plugin {
             // If needed, it's possible to install callbacks when devices are acquired/relinquished.
             // The relinquish callback also fires on channel closure.
             // Here it's used to store device notifcation sinks.
-            Exchange::JSimpleInstanceObjects::Lifetime::Callback<Exchange::ISimpleInstanceObjects::IDevice>(_storage, [this](const bool acquired, Exchange::ISimpleInstanceObjects::IDevice* device) {
+            Sample::JSimpleInstanceObjects::Lifetime::Callback<Sample::ISimpleInstanceObjects::IDevice>(_storage, [this](const bool acquired, Sample::ISimpleInstanceObjects::IDevice* device) {
                 ASSERT(device != nullptr);
 
                 if (acquired == true) {
@@ -564,7 +564,7 @@ namespace Plugin {
                     TRACE(Trace::Information, (_T("Device %s acquired"), name.c_str()));
 
                     ASSERT(_deviceNotificationSinks.find(device) == _deviceNotificationSinks.end());
-                    _deviceNotificationSinks.emplace(device, Core::ServiceType<ImaginaryHostNotificationImpl>::Create<Exchange::ISimpleInstanceObjects::IDevice::INotification>(*this, device));
+                    _deviceNotificationSinks.emplace(device, Core::ServiceType<ImaginaryHostNotificationImpl>::Create<Sample::ISimpleInstanceObjects::IDevice::INotification>(*this, device));
                     device->AddRef();
                 }
                 else {
@@ -595,13 +595,13 @@ namespace Plugin {
                 _service->Unregister(&_notification);
 
                 if (_imaginaryServer != nullptr) {
-                    Exchange::JSimpleAsync::Unregister(*this);
+                    Sample::JSimpleAsync::Unregister(*this);
                     _imaginaryServer->Release();
                     _imaginaryServer = nullptr;
                 }
 
                 if (_imaginaryHost != nullptr) {
-                    Exchange::JSimpleInstanceObjects::Unregister(*this, _storage);
+                    Sample::JSimpleInstanceObjects::Unregister(*this, _storage);
                     _imaginaryHost->Release();
                     _imaginaryHost = nullptr;
                 }
@@ -620,14 +620,14 @@ namespace Plugin {
         BEGIN_INTERFACE_MAP(GeneratorShowcase)
             INTERFACE_ENTRY(PluginHost::IPlugin)
             INTERFACE_ENTRY(PluginHost::IDispatcher)
-            INTERFACE_AGGREGATE(Exchange::ISimpleAsync, _imaginaryServer)
-            INTERFACE_AGGREGATE(Exchange::ISimpleInstanceObjects, _imaginaryHost)
+            INTERFACE_AGGREGATE(Sample::ISimpleAsync, _imaginaryServer)
+            INTERFACE_AGGREGATE(Sample::ISimpleInstanceObjects, _imaginaryHost)
         END_INTERFACE_MAP
 
     private:
-        class ImaginaryHostNotificationImpl : public Exchange::ISimpleInstanceObjects::IDevice::INotification {
+        class ImaginaryHostNotificationImpl : public Sample::ISimpleInstanceObjects::IDevice::INotification {
         public:
-            ImaginaryHostNotificationImpl(GeneratorShowcase& parent, Exchange::ISimpleInstanceObjects::IDevice* const device)
+            ImaginaryHostNotificationImpl(GeneratorShowcase& parent, Sample::ISimpleInstanceObjects::IDevice* const device)
                 : _parent(parent)
                 , _device(device)
             {
@@ -648,19 +648,19 @@ namespace Plugin {
             ImaginaryHostNotificationImpl& operator=(ImaginaryHostNotificationImpl&&) = delete;
 
         public:
-            void StateChanged(const Exchange::ISimpleInstanceObjects::state state) override
+            void StateChanged(const Sample::ISimpleInstanceObjects::state state) override
             {
-                Exchange::JSimpleInstanceObjects::Event::StateChanged(_parent, _parent._storage, _device, state);
+                Sample::JSimpleInstanceObjects::Event::StateChanged(_parent, _parent._storage, _device, state);
             }
 
         public:
             BEGIN_INTERFACE_MAP(ImaginaryHostNotificationImpl)
-                INTERFACE_ENTRY(Exchange::ISimpleInstanceObjects::IDevice::INotification)
+                INTERFACE_ENTRY(Sample::ISimpleInstanceObjects::IDevice::INotification)
             END_INTERFACE_MAP
 
         private:
             GeneratorShowcase& _parent;
-            Exchange::ISimpleInstanceObjects::IDevice* _device;
+            Sample::ISimpleInstanceObjects::IDevice* _device;
 
         }; // class ImaginaryHostNotificationImpl
 
@@ -670,16 +670,16 @@ namespace Plugin {
             ASSERT(_storage != nullptr);
 
             // A websocket channel was closed, we may need to release some resources!
-            Exchange::JSimpleInstanceObjects::Link::Closed(_storage, channel);
+            Sample::JSimpleInstanceObjects::Link::Closed(_storage, channel);
         }
 
     private:
         PluginHost::IShell *_service;
         Core::SinkType<Notification> _notification;
-        Exchange::ISimpleAsync* _imaginaryServer;
-        Exchange::ISimpleInstanceObjects* _imaginaryHost;
-        Exchange::JSimpleInstanceObjects::LookupStorage* _storage;
-        std::map<Exchange::ISimpleInstanceObjects::IDevice*, Exchange::ISimpleInstanceObjects::IDevice::INotification*> _deviceNotificationSinks;
+        Sample::ISimpleAsync* _imaginaryServer;
+        Sample::ISimpleInstanceObjects* _imaginaryHost;
+        Sample::JSimpleInstanceObjects::LookupStorage* _storage;
+        std::map<Sample::ISimpleInstanceObjects::IDevice*, Sample::ISimpleInstanceObjects::IDevice::INotification*> _deviceNotificationSinks;
 
     }; // class GeneratorShowcase
 

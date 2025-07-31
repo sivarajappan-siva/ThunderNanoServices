@@ -38,7 +38,7 @@ namespace Plugin {
                                      , public PluginHost::JSONRPCErrorAssessor<PluginHost::JSONRPCErrorAssessorTypes::FunctionCallbackType>
 //                                     , public PluginHost::JSONRPCErrorAssessor<PluginHost::JSONRPCErrorAssessorTypes::StdFunctionCallbackType>
 //                                     , public PluginHost::JSONRPC
-                                     , public Exchange::IMath {
+                                     , public Sample::IMath {
 
     public:
         DynamicJSONRPCErrorMessage() 
@@ -49,7 +49,7 @@ namespace Plugin {
                 return OnJSONRPCErrorMethod(context, method, params, errorcode, result);
             }) */
 //            , PluginHost::JSONRPC()
-            , Exchange::IMath() 
+            , Sample::IMath() 
         {
         }
         ~DynamicJSONRPCErrorMessage() override = default;
@@ -86,7 +86,7 @@ namespace Plugin {
         BEGIN_INTERFACE_MAP(DynamicJSONRPCErrorMessage)
             INTERFACE_ENTRY(PluginHost::IPlugin)
             INTERFACE_ENTRY(PluginHost::IDispatcher)
-            INTERFACE_ENTRY(Exchange::IMath)
+            INTERFACE_ENTRY(Sample::IMath)
         END_INTERFACE_MAP
 
     }; // class DynamicJSONRPCErrorMessage

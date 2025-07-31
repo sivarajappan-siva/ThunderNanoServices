@@ -26,11 +26,11 @@ namespace Thunder {
 
 namespace Plugin {
 
-    class CastorImplementation: public Exchange::IMath, 
+    class CastorImplementation: public Sample::IMath, 
                                 public Exchange::IConfiguration,
-                                public Thunder::RPC::PluginSmartInterfaceType<Thunder::Exchange::IMath> {
+                                public Thunder::RPC::PluginSmartInterfaceType<Thunder::Sample::IMath> {
     private:
-        using BaseClass = Thunder::RPC::PluginSmartInterfaceType<Thunder::Exchange::IMath>;
+        using BaseClass = Thunder::RPC::PluginSmartInterfaceType<Thunder::Sample::IMath>;
 
         class Config : Core::JSON::Container {
         public:
@@ -135,7 +135,7 @@ namespace Plugin {
 
     public:
         BEGIN_INTERFACE_MAP(CastorImplementation)
-            INTERFACE_ENTRY(Exchange::IMath)
+            INTERFACE_ENTRY(Sample::IMath)
             INTERFACE_ENTRY(Exchange::IConfiguration)
         END_INTERFACE_MAP
 

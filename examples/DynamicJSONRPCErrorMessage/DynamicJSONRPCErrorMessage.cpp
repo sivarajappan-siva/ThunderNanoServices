@@ -45,14 +45,14 @@ namespace Plugin {
     {
         string message{};
 
-        Exchange::JMath::Register(*this, this);
+        Sample::JMath::Register(*this, this);
 
         return (message);
     }
 
     void DynamicJSONRPCErrorMessage::Deinitialize(PluginHost::IShell* service VARIABLE_IS_NOT_USED)
     {
-        Exchange::JMath::Unregister(*this);
+        Sample::JMath::Unregister(*this);
     }
 
     string DynamicJSONRPCErrorMessage::Information() const

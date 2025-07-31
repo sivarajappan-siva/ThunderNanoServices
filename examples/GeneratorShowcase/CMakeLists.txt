@@ -35,14 +35,9 @@ find_package(CompileSettingsDebug REQUIRED)
 
 set(PLUGIN_GENERATORSHOWCASE_STARTMODE "Activated" CACHE STRING "Automatically start the plugin")
 
-add_subdirectory(interfaces)
-
 add_library(${MODULE_NAME} SHARED
     GeneratorShowcase.cpp
     Module.cpp)
-
-add_dependencies(${MODULE_NAME}
-    ${SHOWCASEINTERFACES_DEFINITIONS})
 
 target_include_directories(${MODULE_NAME} SYSTEM
     PRIVATE
@@ -54,8 +49,7 @@ target_link_libraries(${MODULE_NAME}
         ${NAMESPACE}Plugins::${NAMESPACE}Plugins
         ${NAMESPACE}Definitions::${NAMESPACE}Definitions
         ${NAMESPACE}Messaging::${NAMESPACE}Messaging
-        CompileSettingsDebug::CompileSettingsDebug
-        ${SHOWCASEINTERFACES_DEFINITIONS})
+        CompileSettingsDebug::CompileSettingsDebug)
 
 
 # Library installation section

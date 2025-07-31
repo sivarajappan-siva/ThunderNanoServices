@@ -53,7 +53,7 @@ namespace Plugin {
         _service->AddRef();
         _service->Register(&_notification);
 
-        _mathImplementation = _service->Root<Exchange::IMath>(_connectionId, 2000, _T("CastorImplementation"));
+        _mathImplementation = _service->Root<Sample::IMath>(_connectionId, 2000, _T("CastorImplementation"));
         ASSERT(_mathImplementation != nullptr);
 
         if (_mathImplementation == nullptr) {
@@ -70,7 +70,7 @@ namespace Plugin {
                 message = _T("Castor implementation did not provide a configuration interface");
             }
 
-            Exchange::JMath::Register(*this, _mathImplementation);
+            Sample::JMath::Register(*this, _mathImplementation);
         }
 
         return (message);
@@ -82,7 +82,7 @@ namespace Plugin {
             ASSERT(_service == service);
 
             if (_mathImplementation != nullptr) {
-                Exchange::JMath::Unregister(*this);
+                Sample::JMath::Unregister(*this);
 
                 RPC::IRemoteConnection* connection(_service->RemoteConnection(_connectionId));
                 VARIABLE_IS_NOT_USED const uint32_t result = _mathImplementation->Release();

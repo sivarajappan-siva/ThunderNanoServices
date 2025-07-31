@@ -47,7 +47,7 @@ namespace Plugin {
     // As the registration/unregistration of notifications is realized by the class PluginHost::JSONRPC,
     // this class exposes a public method called, Notify(), using this methods, all subscribed clients
     // will receive a JSONRPC message as a notification, in case this method is called.
-    class JSONRPCPlugin : public PluginHost::IPlugin, public PluginHost::JSONRPC, public Exchange::IPerformance, public Exchange::IMath {
+    class JSONRPCPlugin : public PluginHost::IPlugin, public PluginHost::JSONRPC, public Exchange::IPerformance, public Sample::IMath {
     private:
         // We do not allow this plugin to be copied !!
         JSONRPCPlugin(const JSONRPCPlugin&) = delete;
@@ -589,7 +589,7 @@ namespace Plugin {
         INTERFACE_ENTRY(PluginHost::IPlugin)
         INTERFACE_ENTRY(PluginHost::IDispatcher)
         INTERFACE_ENTRY(Exchange::IPerformance)
-        INTERFACE_ENTRY(Exchange::IMath)
+        INTERFACE_ENTRY(Sample::IMath)
         END_INTERFACE_MAP
 
     public:
@@ -611,7 +611,7 @@ namespace Plugin {
         uint32_t Receive(uint16_t& bufferSize, uint8_t buffer[]) const override;
         uint32_t Exchange(uint16_t& bufferSize, uint8_t buffer[], const uint16_t maxBufferSize) override;
 
-        //   Exchange::IMath methods
+        //   Exchange::Sample methods
         // -------------------------------------------------------------------------------------------------------
         uint32_t Add(const uint16_t A, const uint16_t B, uint16_t& sum /* @out */)  const override;
         uint32_t Sub(const uint16_t A, const uint16_t B, uint16_t& sum /* @out */)  const override;

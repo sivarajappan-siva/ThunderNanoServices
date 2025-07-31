@@ -31,7 +31,7 @@
 namespace Thunder {
 
 namespace Plugin {
-    class MathImplementation : public Exchange::IMath {
+    class MathImplementation : public Sample::IMath {
     public:
         MathImplementation(const MathImplementation&) = delete;
         MathImplementation& operator= (const MathImplementation&) = delete;
@@ -54,7 +54,7 @@ namespace Plugin {
         }
 
         BEGIN_INTERFACE_MAP(MathImplementation)
-            INTERFACE_ENTRY(Exchange::IMath)
+            INTERFACE_ENTRY(Sample::IMath)
         END_INTERFACE_MAP
     };
 
@@ -839,7 +839,7 @@ int main(int argc, char** argv)
             }
             case '@':
             {
-                Exchange::IMath* math = client->Acquire<Exchange::IMath>(2000, _T("JSONRPCPlugin"), ~0);
+                Sample::IMath* math = client->Acquire<Sample::IMath>(2000, _T("JSONRPCPlugin"), ~0);
                 if (math != nullptr) {
                     uint16_t A = 10;
                     uint16_t B = 5;
@@ -855,8 +855,8 @@ int main(int argc, char** argv)
             {
                 const uint32_t PerformanceRuns = 100;
                 Plugin::MeasurementClock theClock;
-                Exchange::IMath* local = localPerformance.IUnknown::QueryInterface<Exchange::IMath>();
-                Exchange::IMath* comrpc = client->Acquire<Exchange::IMath>(2000, _T("JSONRPCPlugin"), ~0);
+                Sample::IMath* local = localPerformance.IUnknown::QueryInterface<Sample::IMath>();
+                Sample::IMath* comrpc = client->Acquire<Sample::IMath>(2000, _T("JSONRPCPlugin"), ~0);
                 JSONRPC::LinkType<Core::JSON::IElement> jsonrpc(_T("JSONRPCPlugin.1"));
 
                 if (local != nullptr) {

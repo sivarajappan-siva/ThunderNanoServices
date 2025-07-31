@@ -26,7 +26,7 @@ namespace Thunder {
 
 namespace Plugin {
 
-    class PolluxImplementation: public Exchange::IMath {
+    class PolluxImplementation: public Sample::IMath {
     public:
         PolluxImplementation()
             : IMath()
@@ -58,7 +58,7 @@ namespace Plugin {
 
     public:
         BEGIN_INTERFACE_MAP(PolluxImplementation)
-            INTERFACE_ENTRY(Exchange::IMath)
+            INTERFACE_ENTRY(Sample::IMath)
         END_INTERFACE_MAP
 
     }; // class PolluxImplementation
